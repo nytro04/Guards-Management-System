@@ -15,9 +15,11 @@ const app = express();
 
 app.use(express.json());
 // morgan is logging http requests in development
-app.use(morgan("dev"));
+if (process.env.NODE_ENV === "development") {
+  app.use(morgan("dev"));
+}
 // allows us to serve static files in the public folder
-app.use(express.static(`${__dirname / public}`));
+// app.use(express.static(`${__dirname / public}`));
 
 // middleware example
 app.use((req, res, next) => {

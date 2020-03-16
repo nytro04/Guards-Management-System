@@ -1,13 +1,13 @@
 const express = require("express");
 
 // import controllers or routes handler functions
-import {
+const  {
   getAllUsers,
   getUser,
   createUser,
   updateUser,
   deleteUser
-} from "./../controllers/userController";
+} = require("./../controllers/userController");
 
 /**
  * Routers

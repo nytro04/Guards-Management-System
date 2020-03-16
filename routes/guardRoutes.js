@@ -1,13 +1,13 @@
 const express = require("express");
 
 // import controllers or routes handler functions
-import {
+const {
   getAllGuards,
   getGuard,
   createGuard,
   updateGuard,
   deleteGuard
-} from "./../controllers/guardController";
+} = require("./../controllers/guardController");
 
 /**
  * Router
