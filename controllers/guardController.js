@@ -1,4 +1,4 @@
-const Guard = require("../models/tourModel");
+const Guard = require("../models/guardModel");
 
 /**
  * Guards Routes Handler Functions or Controllers
@@ -80,7 +80,7 @@ exports.createGuard = async (req, res) => {
   } catch (err) {
     res.status(400).json({
       status: "fail",
-      message: "invalid data sent!"
+      message: err
     });
   }
 };
@@ -107,8 +107,7 @@ exports.updateGuard = async (req, res) => {
 };
 
 exports.deleteGuard = async (req, res) => {
-
-  await Guard.findByIdAndDelete(req.params.id)
+  await Guard.findByIdAndDelete(req.params.id);
 
   try {
     res.status(204).json({
