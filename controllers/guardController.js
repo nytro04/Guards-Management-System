@@ -62,6 +62,13 @@ exports.getAllGuards = async (req, res) => {
 
     query = query.skip(skip).limit(limit);
 
+    //if page requested is granter than the number of resouces
+    if (req.query.page) {
+      const numGuards = await Guard.countDocuments();
+      if (skip >= numGuards) throw new Error("This page does not exist");
+    }
+
+
     // execute query
     const guards = await query;
 
