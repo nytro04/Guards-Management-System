@@ -15,7 +15,55 @@ const Guard = require("../models/guardModel");
 
 exports.getAllGuards = async (req, res) => {
   try {
-    const guards = await Guard.find();
+    // another way to filter, you can use lt,gt,lte,gte
+    // const guards = await Guard.find()
+    //   .where("name")
+    //   .equals("koo")
+    //   .where("title")
+    //   .equals("Mr");
+
+    //req.query is used to access queries for filtering
+
+    // Build query workflow
+    // 1a. Filtering
+    const queryObj = { ...req.query }; // makes new copy of request query
+    const excludedFields = ["page", "sort", "limit", "fields"];
+    //delete specified fields from queryObj if they include any of the above
+    excludedFields.forEach(el => delete queryObj[el]);
+
+    // 1b. Advance filtering
+    let queryStr = JSON.stringify(queryObj);
+    queryStr = queryStr.replace(/\b(gte|gt|lte|let)\b/g, match => `$${match}`);
+
+    let query = Guard.find(JSON.parse(queryStr));
+
+    // 2. Sorting
+    if (req.query.sort) {
+      const sortBy = req.query.sort.split(",").join(" ");
+      query = query.sort(sortBy);
+    } else {
+      query = query.sort("-createdAt");
+    }
+
+    // 3. Field limiting. send back only fields requested by clients aka projecting
+    // adding - to the select query removes or hides the field it from the data sent back
+    if (req.query.fields) {
+      const fields = req.query.fields.split(",").join(" ");
+      query = query.select(fields);
+    } else {
+      query = query.select("-__v");
+    }
+
+    // 4. Pagination
+    // if page=3,&limit=10, page 1, 1-10, page 2, 11 - 20, page 3, 21 - 30
+    const page = req.query.page * 1 || 1; // returns the requested page or defaults to 1
+    const limit = req.query.limit * 1 || 20;
+    const skip = (page - 1) * limit;
+
+    query = query.skip(skip).limit(limit);
+
+    // execute query
+    const guards = await query;
 
     res.status(200).json({
       status: "success",

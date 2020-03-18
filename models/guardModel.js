@@ -37,6 +37,11 @@ const guardsSchema = new mongoose.Schema({
   passportPicture: {
     type: String,
     required: [true, "Passport picture is required"]
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now(),
+    select: false
   }
 });
 
