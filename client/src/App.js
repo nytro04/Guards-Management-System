@@ -1,29 +1,29 @@
-import React, { Component} from 'react';
-import { Route } from 'react-router-dom';
-import Clients from './client';
-import Guards from './guards';
-import Register from './register';
-import Login from './login';
-import Navbar from './navBar';
-import "./App.css";
+import React, { Component } from "react";
+import { Route, BrowserRouter, Switch } from "react-router-dom";
+import Clients from "./client";
+import Guards from "./guards";
 
+import Login from "./components/auth/login";
+import Register from "./components/auth/register";
+import Navbar from "./components/layout/navBar";
+
+import "./scss/main.scss";
 
 class App extends Component {
   render() {
     return (
       <React.Fragment>
-      <Navbar />
-      <main className="container">
-          <Route path="/login" component={Login}></Route>
-          <Route path="/client" component={Clients}></Route>
-          <Route path="/guards" component={Guards}></Route>
-          <Route path="/register" component={Register}></Route>
-          
-      </main>
+        <Navbar />
+
+        <Switch>
+          <Route exact path="/login" component={Login}></Route>
+          <Route exact path="/client" component={Clients}></Route>
+          <Route exact path="/guards" component={Guards}></Route>
+          <Route exact path="/register" component={Register}></Route>
+        </Switch>
       </React.Fragment>
     );
   }
-  
 }
 
 export default App;
