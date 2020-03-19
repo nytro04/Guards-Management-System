@@ -6,7 +6,9 @@ const {
   getGuard,
   createGuard,
   updateGuard,
-  deleteGuard
+  deleteGuard,
+  aliasTop,
+  getGuardStats
 } = require("./../controllers/guardController");
 
 /**
@@ -21,6 +23,12 @@ const router = express.Router();
  * these routes are handled by the guard Router above
  * which is a middleware
  */
+
+//top five guards ** filter by different fields
+router.route("/top-5").get(aliasTop, getAllGuards);
+
+//get guards stats
+router.route("/guards-stats").get(getGuardStats);
 
 router
   .route("/")
