@@ -8,7 +8,8 @@ const {
   updateGuard,
   deleteGuard,
   aliasTop,
-  getGuardStats
+  getGuardStats,
+  getMonthlyPlan
 } = require("./../controllers/guardController");
 
 /**
@@ -26,6 +27,9 @@ const router = express.Router();
 
 //top five guards ** filter by different fields
 router.route("/top-5").get(aliasTop, getAllGuards);
+
+//get monthly plan
+router.route("/monthly-plan/:year").get(getMonthlyPlan);
 
 //get guards stats
 router.route("/guards-stats").get(getGuardStats);

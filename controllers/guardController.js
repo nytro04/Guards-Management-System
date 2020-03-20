@@ -152,7 +152,7 @@ exports.getGuardStats = async (req, res) => {
   try {
     const stats = await Guard.aggregate([
       {
-        $match: { salary: { gte: 500 } }
+        $match: { salary: { gte: 500 } } // match is used to select documents
       },
       {
         $group: {
@@ -172,6 +172,62 @@ exports.getGuardStats = async (req, res) => {
       // just to show we can repeat stages in the aggregation pipeline
       {
         $match: { _id: { $ne: "male" } } // match all document that's not equal to male
+      }
+    ]);
+
+    res.status(200).json({
+      status: "success",
+      data: {
+        stats
+      }
+    });
+  } catch (err) {
+    res.status(404).json({
+      status: "failed",
+      message: err
+    });
+  }
+};
+
+exports.getMonthlyPlan = async (req, res) => {
+  try {
+    const year = req.params.year * 1;
+
+    const plan = await Guard.aggregate([
+      {
+        $unwind: "$age" // unwind spreads an array
+      },
+      {
+        $match: {
+          age: {
+            $gte: new Date(`${year}-01-01`),
+            $lte: new Date(`${year}-12-01`)
+          }
+        }
+      },
+      {
+        $group: {
+          _id: { $month: "$age" },
+          numOfAge: { $sum: 1 },
+          guards: { $push: "$name" }
+        }
+      },
+      {
+        // adds a new field to the result
+        $addFields: { month: "$_id" }
+      },
+      {
+        // adds or remove a field, 0 or 1
+        $project: {
+          _id: 0
+        }
+      },
+      {
+        // used for sorting, 1 ascending, -1 descending
+        $sort: { someName: -1 }
+      },
+      {
+        $limit: 6 // limits the output to 6
       }
     ]);
 

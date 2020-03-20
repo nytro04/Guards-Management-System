@@ -15,7 +15,8 @@
     "mongoose": "^5.9.4",
     "morgan": "^1.9.1",
     "node-sass": "^4.13.1",
-    "safe-buffer": "^5.2.0"
+    "safe-buffer": "^5.2.0",
+    "slugify": "^1.4.0"
   },
   "engines": {
     "node": ">= 10.0.0"
