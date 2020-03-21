@@ -1,6 +1,15 @@
 import React, { Component } from "react";
 
 class Register extends Component {
+  handleChange = e => {
+    this.setState({ [e.target.name]: e.target.value });
+  };
+
+  handleSubmit = () => {
+    //get forms data
+    // push to backend via redux action
+  };
+
   render() {
     return (
       <div className="register">
@@ -8,7 +17,7 @@ class Register extends Component {
           <h1 className="text-center my-5">Register</h1>
           <div className="row justify-content-center">
             <div className="col-md-6">
-              <form className="">
+              <form onSubmit={this.handleSubmit} className="">
                 <div className="form-group">
                   <label htmlFor="username">Username</label>
                   <input id="username" type="text" className="form-control" />

@@ -42,6 +42,10 @@ const guardsSchema = new mongoose.Schema(
       type: String,
       required: [true, "Passport picture is required"]
     },
+    // vipGuard: {
+    //   type: Boolean,
+    //   default: false
+    // },
     createdAt: {
       type: Date,
       default: Date.now(),
@@ -94,9 +98,22 @@ guardsSchema.pre("save", function(next) {
 
 /** QUERY MIDDLEWARE
  * Query middlewares allow us to run functions before or after
- * a certain query is executed. The "this" keyword here points
+ * a certain query(find, findOne) is executed. The "this" keyword here points
  * to the current query.
  */
+
+// this will not show vipGuards when find is executed
+// /^find/ look for every query that starts with find (regexp)
+// guardsSchema.pre("/^find/", function(next) {
+//   this.find({ vipGuard: { $ne: true } });
+//   next();
+// });
+
+// post query middleware
+// guardsSchema.post("/^find/", function(){
+//   //do something here
+//   next()
+// })
 
 //todo =>
 // Type of Ids, banks account and branch,reprimands,guarantors and details, employment history,
