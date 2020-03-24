@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const slugify = require("slugify");
+// const validator = require("validator") install first
 
 // create resource schema
 const guardsSchema = new mongoose.Schema(
@@ -8,7 +9,11 @@ const guardsSchema = new mongoose.Schema(
       type: String,
       required: [true, "A guard name is required"],
       trim: true,
-      unique: true // helps to avoid duplication
+      unique: true, // helps to avoid duplication
+      maxlength: [60, "A guard name must be less than 60 characters"],
+      minlength: [10, "A guard name must be more than 5 characters"]
+      //for numbers and dates, we have min and max
+      // validate: [validator.isAlpha, "name must contain only letters"] // install first
     },
     dateOfBirth: {
       type: Date,
@@ -22,11 +27,26 @@ const guardsSchema = new mongoose.Schema(
       type: String,
       required: [true, "Gender is require"],
       enum: {
+        // options are restricted to the 3 values, available only on strings
         values: ["Male", "Female, Other"],
         message: "Gender is either Male, Female or Other"
       }
     },
-    zone: String,
+
+    zone: {
+      type: String
+      // custom(defined yourself) validator
+      // validate: {
+      // validator function, must return boolean
+      //   validator: function(val) {
+      // return expression that returns Boolean
+      // the "this" keyword only works for creating new document
+      // but not on update
+      //   },
+      // validator message ({VALUE}), mongoose value
+      //   message: "some ({VALUE}) validation message"
+      // }
+    },
     location: String,
     title: String,
     slug: String,
@@ -114,6 +134,16 @@ guardsSchema.pre("save", function(next) {
 //   //do something here
 //   next()
 // })
+
+/** AGGREGATION MIDDLEWARE
+ * allow you to do stuff before and after an aggregation
+ */
+
+//  guardsSchema.pre("aggregate", function(next){
+//    // do something here
+// this.pipeline().unshift({ $match: { vipGuard: { $ne: true } } });
+//    next()
+//  })
 
 //todo =>
 // Type of Ids, banks account and branch,reprimands,guarantors and details, employment history,
