@@ -40,4 +40,26 @@ app.use((req, res, next) => {
 app.use("/api/v1/guards", guardRouter);
 app.use("/api/v1/users", userRouter);
 
+//catch all unhandled routes all(get,post,update,delete) * == all
+app.all("*", (req, res, next) => {
+  res.status(404).json({
+    status: "fail",
+    message: `Can't find ${req.originalUrl} on this server`
+  });
+});
+
+// error handling middleware, error first middleware
+// string with new Error is the error message
+// error middlewares are called with err in the next eg. next(err)
+// this makes express calls the global error handler 
+app.use((err, req, res, next) => {
+  err.statusCode = err.statusCode || 500
+  err.status = err.status || "error"
+
+  res.status(err.statusCode).json({
+    status: err.status,
+    message: err.message
+  })
+})
+
 module.exports = app;
