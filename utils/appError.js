@@ -1,4 +1,8 @@
-// AppError extends(inherits from)  the Error class
+
+/**
+ *  Handles errors
+ * AppError extends(inherits from)  the Error class
+ */
 class AppError extends Error {
   //constructor params are what will pass into the new object created from the AppError class
   // it is called each time a new object is created from the AppError class
@@ -12,3 +16,5 @@ class AppError extends Error {
     Error.captureStackTrace(this, this.constructor);
   }
 }
+
+module.exports = AppError
