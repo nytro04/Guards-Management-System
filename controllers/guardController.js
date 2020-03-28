@@ -91,7 +91,7 @@ exports.createGuard = async (req, res) => {
      * @param {object} req.body
      *
      * save or create returns a promise, this is handled
-     * by adding async to the function eg. async (req, res)
+     * by adding .then or async to the function eg. async (req, res)
      * and awaiting the response
      */
     const newGuard = await Guard.create(req.body);

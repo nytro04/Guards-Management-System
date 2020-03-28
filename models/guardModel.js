@@ -9,7 +9,7 @@ const guardsSchema = new mongoose.Schema(
       type: String,
       required: [true, "A guard name is required"],
       trim: true,
-      unique: true, // helps to avoid duplication
+      unique: true, // helps to avoid duplication of field name
       maxlength: [60, "A guard name must be less than 60 characters"],
       minlength: [10, "A guard name must be more than 5 characters"]
       //for numbers and dates, we have min and max
@@ -39,7 +39,7 @@ const guardsSchema = new mongoose.Schema(
       // validate: {
       // validator function, must return boolean
       //   validator: function(val) {
-      // return expression that returns Boolean
+
       // the "this" keyword only works for creating new document
       // but not on update
       //   },
@@ -79,7 +79,7 @@ const guardsSchema = new mongoose.Schema(
   }
 );
 /**
- * use regular functions calls in models in mongoose
+ * use regular functions in models in mongoose
  * because arrow functions dont get their own "this" but "this" of parent.
  * the "this" key in model points to the current document
  */
