@@ -1,6 +1,7 @@
 const Guard = require("../models/guardModel");
 const APIFeatures = require("./../utils/apiFeatures");
 const catchAsync = require("./../utils/catchAsync");
+const AppError = require("./../utils/appError");
 
 /**
  * Guards Routes Handler Functions or Controllers
@@ -59,6 +60,10 @@ exports.getGuard = catchAsync(async (req, res, next) => {
 
   const guard = await Guard.findById(req.params.id);
 
+  if (!guard) {
+    return next(new AppError("No guard was found with that ID", 404));
+  }
+
   res.status(200).json({
     status: "success",
     data: {
@@ -97,6 +102,10 @@ exports.updateGuard = catchAsync(async (req, res, next) => {
     runValidators: true // runs validators against the model's schema
   });
 
+  if (!guard) {
+    return next(new AppError("No guard was found with that ID", 404));
+  }
+
   res.status(200).json({
     status: "success",
     data: {
@@ -106,7 +115,11 @@ exports.updateGuard = catchAsync(async (req, res, next) => {
 });
 
 exports.deleteGuard = catchAsync(async (req, res, next) => {
-  await Guard.findByIdAndDelete(req.params.id);
+  const guard = await Guard.findByIdAndDelete(req.params.id);
+
+  if (!guard) {
+    return next(new AppError("No guard found with that ID", 404));
+  }
 
   res.status(204).json({
     status: "success",
