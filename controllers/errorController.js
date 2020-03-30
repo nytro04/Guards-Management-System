@@ -1,3 +1,41 @@
+const AppError = require("./../utils/appError");
+
+/** Handle Duplicate Input Value Error Mongo
+ *
+ * @param {*} err
+ * @returns {Object} new AppError
+ */
+const handleDuplicateFieldsErrorDB = err => {
+  const value = err.errmsg.match(/(["'])(\\?.)*?\1/)[0];
+
+  const message = `Duplicate field value: ${value}. Please use another value`;
+  return new AppError(message, 400);
+};
+
+/** Handle Cast Error from Mongo
+ *
+ * @param {Object} err
+ * @returns {Object} new AppError
+ */
+const handleCastErrorDB = err => {
+  const message = `Invalid ${err.name}: ${err.value}`;
+  return new AppError(message, 400);
+};
+
+/** Handle Validation input errors from mongo
+ *
+ * @param {*} err
+ * @returns {Object} new AppError
+ */
+const handleValidationErrorDB = err => {
+  // loop over object and return message
+  const errors = Object.values(err.errors).map(element => element.message);
+
+  const message = `Invalid input data. ${errors.join(". ")}`;
+
+  return new AppError(message, 400);
+};
+
 /** Error Message sent in development
  *
  * @param {*} err
@@ -50,6 +88,13 @@ module.exports = (err, req, res, next) => {
   if (process.env.NODE_ENV === "development") {
     sendErrorDev(err, res);
   } else if (process.env.NODE_ENV === "production") {
-    sendErrorDev(err, res);
+    let error = { ...err };
+
+    if (error.name === "CastError") error = handleCastErrorDB(error);
+    if (error.code === 11000) error = handleDuplicateFieldsErrorDB(error);
+    if (error.name === "ValidationError")
+      error = handleValidationErrorDB(error);
+
+    sendErrorDev(error, res);
   }
 };
