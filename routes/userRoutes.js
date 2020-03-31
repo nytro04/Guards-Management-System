@@ -1,13 +1,15 @@
 const express = require("express");
 
 // import controllers or routes handler functions
-const  {
+const {
   getAllUsers,
   getUser,
   createUser,
   updateUser,
   deleteUser
 } = require("./../controllers/userController");
+
+const { signup } = require("./../controllers/authController");
 
 /**
  * Routers
@@ -22,6 +24,9 @@ const router = express.Router();
  * these routes are handled by the user Router above
  * which is a middleware
  */
+
+// Sign up or Register a new user
+router.post("/signup", signup);
 
 router
   .route("/")
