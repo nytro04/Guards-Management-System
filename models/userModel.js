@@ -18,7 +18,8 @@ const userSchema = new mongoose.Schema({
   password: {
     type: String,
     required: [true, "Please provide a password"],
-    minlength: 8
+    minlength: 8,
+    select: false // removes password from any response
   },
   passwordConfirm: {
     type: String,
@@ -37,7 +38,7 @@ const userSchema = new mongoose.Schema({
  *  Encrypt password and delete confirm password
  */
 userSchema.pre("save", async function(next) {
-  // move to the next middleware if the not created new or updated
+  // move to the next middleware if it's not created new or updated
   if (!this.isModified("password")) return next();
 
   //  only happens if the password is been created new or updated
@@ -50,6 +51,15 @@ userSchema.pre("save", async function(next) {
   this.passwordConfirm = undefined;
   next();
 });
+
+// instant methods... available on all document of a certain collection
+// compare login password provided with user password in DB
+userSchema.methods.comparePasswords = async function(
+  candidatePassword,
+  userPassword
+) {
+  return await bcrypt.compare(candidatePassword, userPassword);
+};
 
 const User = mongoose.model("User", userSchema);
 

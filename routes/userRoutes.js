@@ -9,7 +9,7 @@ const {
   deleteUser
 } = require("./../controllers/userController");
 
-const { signup } = require("./../controllers/authController");
+const { signup, login } = require("./../controllers/authController");
 
 /**
  * Routers
@@ -25,8 +25,11 @@ const router = express.Router();
  * which is a middleware
  */
 
-// Sign up or Register a new user
+// Sign up or Register a new user route
 router.post("/signup", signup);
+
+// Sign in user route
+router.post("/login", login)
 
 router
   .route("/")
