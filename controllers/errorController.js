@@ -5,7 +5,7 @@ const AppError = require("./../utils/appError");
  * @param {*} err
  * @returns {Object} new AppError
  */
-const handleDuplicateFieldsErrorDB = err => {
+const handleDuplicateFieldsErrorDB = (err) => {
   const value = err.errmsg.match(/(["'])(\\?.)*?\1/)[0];
 
   const message = `Duplicate field value: ${value}. Please use another value`;
@@ -17,7 +17,7 @@ const handleDuplicateFieldsErrorDB = err => {
  * @param {Object} err
  * @returns {Object} new AppError
  */
-const handleCastErrorDB = err => {
+const handleCastErrorDB = (err) => {
   const message = `Invalid ${err.name}: ${err.value}`;
   return new AppError(message, 400);
 };
@@ -27,14 +27,30 @@ const handleCastErrorDB = err => {
  * @param {*} err
  * @returns {Object} new AppError
  */
-const handleValidationErrorDB = err => {
+const handleValidationErrorDB = (err) => {
   // loop over object and return message
-  const errors = Object.values(err.errors).map(element => element.message);
+  const errors = Object.values(err.errors).map((element) => element.message);
 
   const message = `Invalid input data. ${errors.join(". ")}`;
 
   return new AppError(message, 400);
 };
+
+/** Handle JWT Invalid token error
+ *
+ * @param {*} err
+ * @returns {Object} new AppError
+ */
+const handleJWTError = () =>
+  new AppError("Invalid token, Please log in again", 401);
+
+/** Handle expired JWT
+ *
+ * @param {*} err
+ * @returns {Object} new AppError
+ */
+const handleJWTExpiredError = () =>
+  new AppError("Your token has expired, Please log in again", 401);
 
 /** Error Message sent in development
  *
@@ -47,7 +63,7 @@ const sendErrorDev = (err, res) => {
     status: err.status,
     message: err.message,
     error: err,
-    stack: err.stack
+    stack: err.stack,
   });
 };
 
@@ -62,7 +78,7 @@ const sendErrorProd = (err, res) => {
   if (err.isOperational) {
     res.status(err.statusCode).json({
       status: err.status,
-      message: err.message
+      message: err.message,
     });
   } else {
     // Programming or unknown errors, aka bugs. dont leak that to clients
@@ -70,7 +86,7 @@ const sendErrorProd = (err, res) => {
 
     res.status(500).json({
       status: "error",
-      message: "Something went very wrong!"
+      message: "Something went very wrong!",
     });
   }
 };
@@ -94,6 +110,8 @@ module.exports = (err, req, res, next) => {
     if (error.code === 11000) error = handleDuplicateFieldsErrorDB(error);
     if (error.name === "ValidationError")
       error = handleValidationErrorDB(error);
+    if (error.name === "JsonWebTokenError") error = handleJWTError();
+    if (error.name === "TokenExpiredError") error = handleJWTExpiredError();
 
     sendErrorDev(error, res);
   }

@@ -1,3 +1,4 @@
+const { promisify } = require("util");
 const jwt = require("jsonwebtoken");
 const User = require("./../models/userModel");
 const catchAsync = require("./../utils/catchAsync");
@@ -11,9 +12,9 @@ const AppError = require("./../utils/appError");
  * @param {user id} id
  * @returns {*} JWT token
  */
-const signToken = id => {
+const signToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
-    expiresIn: process.env.JWT_EXPIRES_IN
+    expiresIn: process.env.JWT_EXPIRES_IN,
   });
 };
 
@@ -32,8 +33,8 @@ exports.signup = catchAsync(async (req, res, next) => {
     status: "success",
     token,
     data: {
-      user: newUser
-    }
+      user: newUser,
+    },
   });
 });
 
@@ -47,7 +48,6 @@ exports.login = catchAsync(async (req, res, next) => {
   if (!password) return next(new AppError("Please provide password", 400));
 
   // 2. Check if user exist and password is correct
-
   // +password adds the removed password back to user document
   const user = await User.findOne({ email }).select("+password");
   // check and return error if user exist and password is correct
@@ -63,6 +63,35 @@ exports.login = catchAsync(async (req, res, next) => {
 
   res.status(200).json({
     status: "success",
-    token
+    token,
   });
+});
+
+exports.protect = catchAsync(async (req, res, next) => {
+  let token;
+  // 1. Check if token exist
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.startsWith("Bearer")
+  ) {
+    token = req.headers.authorization.split(" ")[1];
+  }
+
+  if (!token) {
+    return next(
+      new AppError("You are not logged in! Please log in to get access", 401)
+    );
+  }
+
+  // 2. Verify token
+  const decodedToken = await promisify(jwt.verify)(
+    token,
+    process.env.JWT_SECRET
+  );
+
+  // 3. Check if user still exist
+
+  // 4. Check if user changed password after token was issued
+
+  next();
 });

@@ -9,8 +9,10 @@ const {
   deleteGuard,
   aliasTop,
   getGuardStats,
-  getMonthlyPlan
+  getMonthlyPlan,
 } = require("./../controllers/guardController");
+
+const { protect } = require("./../controllers/authController");
 
 /**
  * Router
@@ -34,15 +36,8 @@ router.route("/monthly-plan/:year").get(getMonthlyPlan);
 //get guards stats
 router.route("/guards-stats").get(getGuardStats);
 
-router
-  .route("/")
-  .get(getAllGuards)
-  .post(createGuard);
+router.route("/").get(protect, getAllGuards).post(createGuard);
 
-router
-  .route("/:id")
-  .get(getGuard)
-  .patch(updateGuard)
-  .delete(deleteGuard);
+router.route("/:id").get(getGuard).patch(updateGuard).delete(deleteGuard);
 
 module.exports = router;
