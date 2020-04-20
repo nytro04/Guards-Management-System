@@ -5,39 +5,40 @@ const bcrypt = require("bcryptjs");
 const userSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: [true, "Name field is require"]
+    required: [true, "Name field is require"],
   },
   email: {
     type: String,
     required: [true, "Please provide an email"],
     unique: true,
     lowercase: true,
-    validate: [validator.isEmail, "Please provide a valid email"]
+    validate: [validator.isEmail, "Please provide a valid email"],
   },
   photo: String,
   password: {
     type: String,
     required: [true, "Please provide a password"],
     minlength: 8,
-    select: false // removes password from any response
+    select: false, // removes password from any response
   },
   passwordConfirm: {
     type: String,
     required: [true, "Please provide a confirm password"],
     validate: {
       // this only works on create and save not on update
-      validator: function(element) {
+      validator: function (element) {
         return element === this.password;
       },
-      message: "Passwords do not match"
-    }
-  }
+      message: "Passwords do not match",
+    },
+  },
+  passwordChangedAt: Date,
 });
 
 /**
  *  Encrypt password and delete confirm password
  */
-userSchema.pre("save", async function(next) {
+userSchema.pre("save", async function (next) {
   // move to the next middleware if it's not created new or updated
   if (!this.isModified("password")) return next();
 
@@ -54,11 +55,27 @@ userSchema.pre("save", async function(next) {
 
 // instant methods... available on all document of a certain collection
 // compare login password provided with user password in DB
-userSchema.methods.comparePasswords = async function(
+userSchema.methods.comparePasswords = async function (
   candidatePassword,
   userPassword
 ) {
   return await bcrypt.compare(candidatePassword, userPassword);
+};
+
+// check if user changed password after toke was issued
+
+userSchema.methods.changedPasswordAfterTokenIssue = function (JWTTimestamp) {
+  if (this.passwordChangeAt) {
+    const changedTimestamp = parseInt(
+      this.passwordChangedAt.getTime() / 1000,
+      10
+    );
+
+    return JWTTimestamp < changedTimestamp;
+  }
+
+  // password was not changed
+  return false;
 };
 
 const User = mongoose.model("User", userSchema);
