@@ -38,6 +38,10 @@ router.route("/guards-stats").get(getGuardStats);
 
 router.route("/").get(protect, getAllGuards).post(createGuard);
 
-router.route("/:id").get(getGuard).patch(updateGuard).delete(deleteGuard);
+router
+  .route("/:id")
+  .get(getGuard)
+  .patch(updateGuard)
+  .delete(protect, deleteGuard);
 
 module.exports = router;
