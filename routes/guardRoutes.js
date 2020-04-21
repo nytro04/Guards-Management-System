@@ -12,7 +12,7 @@ const {
   getMonthlyPlan,
 } = require("./../controllers/guardController");
 
-const { protect } = require("./../controllers/authController");
+const { protect, restrictTo } = require("./../controllers/authController");
 
 /**
  * Router
@@ -42,6 +42,6 @@ router
   .route("/:id")
   .get(getGuard)
   .patch(updateGuard)
-  .delete(protect, deleteGuard);
+  .delete(protect, restrictTo("staff", "admin", "super-amin"), deleteGuard);
 
 module.exports = router;

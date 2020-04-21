@@ -23,8 +23,14 @@ const signToken = (id) => {
 
 // Sign Up new user
 exports.signup = catchAsync(async (req, res, next) => {
-  const { name, email, password, passwordConfirm } = req.body;
-  const newUser = await User.create({ name, email, password, passwordConfirm });
+  const { role, name, email, password, passwordConfirm } = req.body;
+  const newUser = await User.create({
+    role,
+    name,
+    email,
+    password,
+    passwordConfirm,
+  });
 
   // JWT Token
   const token = signToken(newUser._id);
@@ -105,7 +111,25 @@ exports.protect = catchAsync(async (req, res, next) => {
     );
   }
 
+  // add user to req
   req.user = currentUser;
   // Grant access to protected route
   next();
 });
+
+/** Restrict actions to certain roles
+ *  eg. staff, admin
+ *
+ * @param {[]} roles
+ * @returns
+ */
+exports.restrictTo = (...roles) => {
+  return (req, res, next) => {
+    if (!roles.includes(req.user.role)) {
+      return next(
+        new AppError("You do not have permissions to perform this action", 403)
+      );
+    }
+    return next();
+  };
+};

@@ -1,37 +1,50 @@
-import React, { Component } from "react";
+import React from "react";
+import Joi from "joi-browser";
+import Form from "../layout/form";
 
-class Register extends Component {
-  handleChange = e => {
-    this.setState({ [e.target.name]: e.target.value });
+class Register extends Form {
+  state = {
+    data: { username: "", password: "", name: "" },
+    errors: {},
   };
 
-  handleSubmit = () => {
-    //get forms data
-    // push to backend via redux action
+  schema = {
+    username: Joi.string().required().email().label("Username"),
+    password: Joi.string().required().min(5).label("Password"),
+    name: Joi.string().required().label("Name"),
+  };
+
+  doSubmit = () => {
+    console.log("Submitted");
   };
 
   render() {
     return (
-      <div className="register">
-        <div className="container my-5">
-          <h1 className="text-center my-5">Register</h1>
-          <div className="row justify-content-center">
-            <div className="col-md-6">
-              <form onSubmit={this.handleSubmit} className="">
-                <div className="form-group">
-                  <label htmlFor="username">Username</label>
-                  <input id="username" type="text" className="form-control" />
+      <div className="New Client">
+        <div>
+          <header id="main-header" className="py-2 bg-warning text-white">
+            <div className="container">
+              <div className="row">
+                <div className="col-md-6">
+                  <h1>
+                    <i className="fas fa-user-plus"></i> Register
+                  </h1>
                 </div>
-                <div className="form-group">
-                  <label htmlFor="password">Password</label>
-                  <input id="password" type="text" className="form-control" />
-                </div>
-                <div className="form-group">
-                  <label htmlFor="name">Name</label>
-                  <input id="name" type="text" className="form-control" />
-                </div>
-                <button className="btn btn-primary">Register</button>
-              </form>
+              </div>
+            </div>
+          </header>
+        </div>
+        <div className="Register">
+          <div className="container my-5">
+            <div className="row justify-content-center">
+              <div className="col-md-6">
+                <form onSubmit={this.handleSubmit}>
+                  {this.renderInput("username", "Username")}
+                  {this.renderInput("password", "Password", "password")}
+                  {this.renderInput("name", "Name")}
+                  {this.renderButton("Register")}
+                </form>
+              </div>
             </div>
           </div>
         </div>

@@ -49,8 +49,8 @@ exports.getAllGuards = catchAsync(async (req, res, next) => {
     status: "success",
     length: guards.length,
     data: {
-      guards
-    }
+      guards,
+    },
   });
 });
 
@@ -67,8 +67,8 @@ exports.getGuard = catchAsync(async (req, res, next) => {
   res.status(200).json({
     status: "success",
     data: {
-      guard
-    }
+      guard,
+    },
   });
 });
 
@@ -90,8 +90,8 @@ exports.createGuard = catchAsync(async (req, res, next) => {
   res.status(201).json({
     status: "success",
     data: {
-      guard: newGuard
-    }
+      guard: newGuard,
+    },
   });
 });
 
@@ -99,7 +99,7 @@ exports.createGuard = catchAsync(async (req, res, next) => {
 exports.updateGuard = catchAsync(async (req, res, next) => {
   const guard = await Guard.findByIdAndUpdate(req.params.id, req.body, {
     new: true, // returns the new document instead of the old one
-    runValidators: true // runs validators against the model's schema
+    runValidators: true, // runs validators against the model's schema
   });
 
   if (!guard) {
@@ -109,8 +109,8 @@ exports.updateGuard = catchAsync(async (req, res, next) => {
   res.status(200).json({
     status: "success",
     data: {
-      guard
-    }
+      guard,
+    },
   });
 });
 
@@ -123,7 +123,7 @@ exports.deleteGuard = catchAsync(async (req, res, next) => {
 
   res.status(204).json({
     status: "success",
-    data: null
+    data: null,
   });
 });
 
@@ -131,7 +131,7 @@ exports.deleteGuard = catchAsync(async (req, res, next) => {
 exports.getGuardStats = catchAsync(async (req, res, next) => {
   const stats = await Guard.aggregate([
     {
-      $match: { salary: { gte: 500 } } // match is used to select documents
+      $match: { salary: { gte: 500 } }, // match is used to select documents
     },
     {
       $group: {
@@ -142,23 +142,23 @@ exports.getGuardStats = catchAsync(async (req, res, next) => {
         avgAge: { $avg: "$age" }, // average age
         avgSalary: { $avg: "$salary" }, // average salary
         minSalary: { $min: "$salary" }, // minimum salary
-        maxSalary: { $max: "$salary" } // maximum salary
-      }
+        maxSalary: { $max: "$salary" }, // maximum salary
+      },
     },
     {
-      $sort: { minSalary: 1 } // sort minimum salary by ascending(lowest first)
+      $sort: { minSalary: 1 }, // sort minimum salary by ascending(lowest first)
     },
     // just to show we can repeat stages in the aggregation pipeline
     {
-      $match: { _id: { $ne: "male" } } // match all document that's not equal to male
-    }
+      $match: { _id: { $ne: "male" } }, // match all document that's not equal to male
+    },
   ]);
 
   res.status(200).json({
     status: "success",
     data: {
-      stats
-    }
+      stats,
+    },
   });
 });
 
@@ -167,47 +167,47 @@ exports.getMonthlyPlan = catchAsync(async (req, res, next) => {
 
   const plan = await Guard.aggregate([
     {
-      $unwind: "$age" // unwind spreads an array
+      $unwind: "$age", // unwind spreads an array
     },
     {
       $match: {
         age: {
           $gte: new Date(`${year}-01-01`),
-          $lte: new Date(`${year}-12-01`)
-        }
-      }
+          $lte: new Date(`${year}-12-01`),
+        },
+      },
     },
     {
       $group: {
         _id: { $month: "$age" },
         numOfAge: { $sum: 1 },
-        guards: { $push: "$name" }
-      }
+        guards: { $push: "$name" },
+      },
     },
     {
       // adds a new field to the result
-      $addFields: { month: "$_id" }
+      $addFields: { month: "$_id" },
     },
     {
       // adds or remove a field, 0 or 1
       $project: {
-        _id: 0
-      }
+        _id: 0,
+      },
     },
     {
       // used for sorting, 1 ascending, -1 descending
-      $sort: { someName: -1 }
+      $sort: { someName: -1 },
     },
     {
-      $limit: 6 // limits the output to 6
-    }
+      $limit: 6, // limits the output to 6
+    },
   ]);
 
   res.status(200).json({
     status: "success",
     data: {
-      stats
-    }
+      stats,
+    },
   });
 });
 
