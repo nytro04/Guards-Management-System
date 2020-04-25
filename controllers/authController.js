@@ -3,6 +3,7 @@ const jwt = require("jsonwebtoken");
 const User = require("./../models/userModel");
 const catchAsync = require("./../utils/catchAsync");
 const AppError = require("./../utils/appError");
+const sendMail = require("./../utils/email");
 
 /** Sign JWT
  * JWT secret should be 32 characters long
@@ -142,9 +143,53 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
     return next(new AppError("There is no user with this email address", 404));
   }
 
+  
   // 2. generate random token
   const resetToken = user.createPasswordResetToken();
   await user.save({ validateBeforeSave: false });
 
   // 3. send token to user as email
+  const resetURL = `${req.protocol}://${req.get(
+    "host"
+  )}/api/v1/users/resetPassword/${resetToken}`;
+
+  const message = `
+  We heard that you lost your GuardSys password. Sorry about that!\n
+  But don’t worry! You can use the following link to reset your password: \n
+
+  ${resetURL} \n
+
+  If you don’t use this link within 1 hour, it will expire. \n
+
+  Please ignore this message if you didnt forget your password. \n
+
+  Thanks\n
+  Team at GuardSys
+  `;
+
+  try {
+    await sendMail({
+      email: user.email,
+      subject: "[GuardSys] Please reset your password",
+      message,
+    });
+
+    res.status(200).json({
+      status: "success",
+      message: "Token sent to email",
+    });
+  } catch (err) {
+    user.passwordResetToken = undefined;
+    user.passwordResetExpires = undefined;
+    await user.save({ validateBeforeSave: false });
+
+    return next(
+      new AppError(
+        "There was an error sending reset email, Please try again",
+        500
+      )
+    );
+  }
 });
+
+exports.resetPassword = catchAsync(async (req, res, next) => {});

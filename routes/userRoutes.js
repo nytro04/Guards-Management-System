@@ -13,6 +13,7 @@ const {
   signup,
   login,
   forgotPassword,
+  resetPassword,
 } = require("./../controllers/authController");
 
 /**
@@ -39,7 +40,7 @@ router.post("/login", login);
 router.post("/forgotPassword", forgotPassword);
 
 // reset password
-router.post("/login", login);
+router.patch("/resetPassword/:token", resetPassword);
 
 router.route("/").get(getAllUsers).post(createUser);
 
