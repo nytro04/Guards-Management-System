@@ -71,7 +71,6 @@ userSchema.methods.comparePasswords = async function (
 };
 
 // check if user changed password after toke was issued
-
 userSchema.methods.changedPasswordAfterTokenIssue = function (JWTTimestamp) {
   if (this.passwordChangeAt) {
     const changedTimestamp = parseInt(
@@ -100,7 +99,7 @@ userSchema.methods.createPasswordResetToken = function () {
     .update(resetToken)
     .digest("hex");
 
-  this.passwordResetExpires = Date.now() * 10 * 60 * 10000;
+  this.passwordResetExpires = Date.now() + 60 * 60 * 1000;
 
   return resetToken
 };
