@@ -61,6 +61,14 @@ userSchema.pre("save", async function (next) {
   next();
 });
 
+//
+userSchema.pre("save", function (next) {
+  if (!this.isModified("password") || this.isNew) return next();
+
+  this.passwordChangedAt = Date.now() - 1000;
+  next();
+});
+
 // instant methods... available on all document of a certain collection
 // compare login password provided with user password in DB
 userSchema.methods.comparePasswords = async function (
@@ -101,7 +109,7 @@ userSchema.methods.createPasswordResetToken = function () {
 
   this.passwordResetExpires = Date.now() + 60 * 60 * 1000;
 
-  return resetToken
+  return resetToken;
 };
 
 const User = mongoose.model("User", userSchema);

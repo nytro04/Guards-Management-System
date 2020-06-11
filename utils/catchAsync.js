@@ -1,6 +1,7 @@
 /**
  * Handles async try catch block and global error
- * @param {*} fn
+ * @param {*} function
+ * @returns {*}  async function
  */
 module.exports = fn => {
   return (req, res, next) => {

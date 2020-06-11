@@ -14,6 +14,8 @@ const {
   login,
   forgotPassword,
   resetPassword,
+  protect,
+  updatePassword,
 } = require("./../controllers/authController");
 
 /**
@@ -41,6 +43,9 @@ router.post("/forgotPassword", forgotPassword);
 
 // reset password
 router.patch("/resetPassword/:token", resetPassword);
+
+// Update logged In User password
+router.patch("/updateMyPassword", protect, updatePassword );
 
 router.route("/").get(getAllUsers).post(createUser);
 
