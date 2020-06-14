@@ -8,6 +8,7 @@ const {
   updateUser,
   deleteUser,
   updateMe,
+  deleteMe,
 } = require("./../controllers/userController");
 
 const {
@@ -50,6 +51,9 @@ router.patch("/updateMyPassword", protect, updatePassword);
 
 //Update logged In user Info
 router.patch("/updateMe", protect, updateMe);
+
+// Users delete their account (soft delete)
+router.delete("/deleteMe", protect, deleteMe);
 
 router.route("/").get(getAllUsers).post(createUser);
 

@@ -5,6 +5,7 @@ const User = require("./../models/userModel");
 const catchAsync = require("./../utils/catchAsync");
 const AppError = require("./../utils/appError");
 const sendMail = require("./../utils/email");
+const { Console } = require("console");
 
 /** Sign JWT
  * JWT secret should be 32 characters long
@@ -72,7 +73,8 @@ exports.login = catchAsync(async (req, res, next) => {
   // 2. Check if user exist and password is correct
   // +password adds the removed password back to user document
   const user = await User.findOne({ email }).select("+password");
-  // check and return error if user exist and password is correct
+  // check and return error if user does not exist on DB
+  console.log(user);
   if (!user) return next(new AppError("Incorrect email", 401));
 
   // compare passwords

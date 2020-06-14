@@ -29,12 +29,16 @@ const filterObj = (obj, ...allowedFields) => {
  * @param {object} res
  */
 
-exports.getAllUsers = (req, res) => {
-  res.status(500).json({
-    status: "error",
-    message: "This route is not yet implemented",
+exports.getAllUsers = catchAsync(async (req, res, next) => {
+  const users = await User.find();
+
+  res.status(200).json({
+    status: "success",
+    data: {
+      user: users,
+    },
   });
-};
+});
 
 // Update user info but not passwords
 exports.updateMe = catchAsync(async (req, res, next) => {
@@ -52,6 +56,8 @@ exports.updateMe = catchAsync(async (req, res, next) => {
   const filteredBody = filterObj(req.body, "name", "email");
 
   // 3. Update User Info eg. name and email
+  // 4. We use findById because this activity is done by logged in users
+  // and their id comes from the protected middleware
   const updatedUser = await User.findByIdAndUpdate(req.user.id, filteredBody, {
     new: true,
     runValidators: true,
@@ -62,6 +68,16 @@ exports.updateMe = catchAsync(async (req, res, next) => {
     data: {
       user: updatedUser,
     },
+  });
+});
+
+// Users delete their account. (soft delete)
+exports.deleteMe = catchAsync(async (req, res, next) => {
+  await User.findByIdAndUpdate(req.user.id, { active: false });
+
+  res.status(204).json({
+    status: "success",
+    data: null,
   });
 });
 
