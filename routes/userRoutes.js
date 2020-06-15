@@ -35,9 +35,11 @@ const router = express.Router();
  */
 
 // Sign up or Register a new user route
+// add confirm email address after sign up
 router.post("/signup", signup);
 
 // Sign in user route
+// checkout and implement maximum number of log in attempts.
 router.post("/login", login);
 
 // forgot password
