@@ -1,8 +1,9 @@
 const express = require("express");
 const morgan = require("morgan");
+const rateLimit = require("express-rate-limit");
 
 const AppError = require("./utils/appError");
-const globalErrorHandler = require ("./controllers/errorController.js");
+const globalErrorHandler = require("./controllers/errorController.js");
 
 //importing routers from routes folder
 const guardRouter = require("./routes/guardRoutes");
@@ -11,7 +12,8 @@ const userRouter = require("./routes/userRoutes");
 // initial express with app
 const app = express();
 
-/** add express.json() * express middleware * to get access to
+/** GLOBAL MIDDLEWARE
+ *  add express.json() * express middleware * to get access to
  * data (data from client) on the request body
  * # app.use # allows you to add middleware to your middleware stack
  */
@@ -21,6 +23,16 @@ app.use(express.json());
 if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
 }
+
+// Rate limit => prevents too many request from one IP
+const limiter = rateLimit({
+  max: 100,
+  windowMs: 60 * 60 * 1000,
+  message: "Too many requests from this IP, please try again in an hour",
+});
+
+app.use("/api", limiter);
+
 // allows us to serve static files in the public folder
 // app.use(express.static(`${__dirname / public}`));
 
