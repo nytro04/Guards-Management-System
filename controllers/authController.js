@@ -172,7 +172,7 @@ exports.restrictTo = (...roles) => {
 exports.forgotPassword = catchAsync(async (req, res, next) => {
   // 1. get user by email
   const user = await User.findOne({ email: req.body.email });
-  // check if use exist
+  // check if user exist
   if (!user) {
     return next(new AppError("There is no user with this email address", 404));
   }
