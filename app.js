@@ -1,7 +1,7 @@
 const express = require("express");
 const morgan = require("morgan");
 const rateLimit = require("express-rate-limit");
-const helmet =require("helmet")
+const helmet = require("helmet");
 
 const AppError = require("./utils/appError");
 const globalErrorHandler = require("./controllers/errorController.js");
@@ -19,7 +19,11 @@ const app = express();
  * # app.use # allows you to add middleware to your middleware stack
  */
 
-app.use(express.json());
+// Set security HTTP headers
+app.use(helmet());
+
+// Body parser, reading data from body into req.body
+app.use(express.json({ limit: "10kb" }));
 // morgan is logging http requests in development
 if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));

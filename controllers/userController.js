@@ -4,7 +4,7 @@ const catchAsync = require("./../utils/catchAsync");
 const AppError = require("./../utils/appError");
 
 /**
- *
+ * @desc filter out properties that must not be included
  * @param {req.body} obj
  * @param  {...any} allowedFields
  * @returns {Object} newObj
