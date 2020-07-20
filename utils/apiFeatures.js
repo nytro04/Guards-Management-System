@@ -9,13 +9,13 @@ class APIFeatures {
     const queryObj = { ...req.query }; // makes new copy of request query
     const excludedFields = ["page", "sort", "limit", "fields"];
     //delete specified fields from queryObj if they include any of the above
-    excludedFields.forEach(el => delete queryObj[el]);
+    excludedFields.forEach((el) => delete queryObj[el]);
 
     // 1b. Advance filtering
     let queryStr = JSON.stringify(queryObj);
-    queryStr = queryStr.replace(/\b(gte|gt|lte|let)\b/g, match => `$${match}`);
+    queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`);
 
-    this.query = this.query.find(JSON.parse(queryStr));
+    this.query = this.query.find(JSON.parse(queryStr)); 
 
     return this;
   }

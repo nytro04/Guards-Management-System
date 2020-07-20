@@ -25,7 +25,7 @@ exports.aliasTop = (req, res, next) => {
 
 // Get all Guards //todo: implement filtering
 exports.getAllGuards = catchAsync(async (req, res, next) => {
-  // another way to filter, is use lt,gt,lte,gte
+  // another way to filter, is use mongoose methods lt,gt,lte,gte
   // const guards = await Guard.find()
   //   .where("name")
   //   .equals("koo")
@@ -45,6 +45,7 @@ exports.getAllGuards = catchAsync(async (req, res, next) => {
 
   const guards = await Guard.find();
 
+  // send request
   res.status(200).json({
     status: "success",
     length: guards.length,
@@ -98,7 +99,7 @@ exports.createGuard = catchAsync(async (req, res, next) => {
 // Update a Guard
 exports.updateGuard = catchAsync(async (req, res, next) => {
   const guard = await Guard.findByIdAndUpdate(req.params.id, req.body, {
-    new: true, // returns the new document instead of the old one
+    new: true, // returns the new updated document instead of the old one
     runValidators: true, // runs validators against the model's schema
   });
 

@@ -37,8 +37,6 @@ const handleValidationErrorDB = (err) => {
 };
 
 /** Handle JWT Invalid token error
- *
- * @param {*} err
  * @returns {Object} new AppError
  */
 const handleJWTError = () =>
@@ -81,7 +79,7 @@ const sendErrorProd = (err, res) => {
       message: err.message,
     });
   } else {
-    // Programming or unknown errors, aka bugs. dont leak that to clients
+    // Programming or unknown errors, aka bugs. don't leak that to clients
     console.error("ERROR 🥵", err);
 
     res.status(500).json({
@@ -113,6 +111,6 @@ module.exports = (err, req, res, next) => {
     if (error.name === "JsonWebTokenError") error = handleJWTError();
     if (error.name === "TokenExpiredError") error = handleJWTExpiredError();
 
-    sendErrorDev(error, res);
+    sendErrorProd(error, res);
   }
 };

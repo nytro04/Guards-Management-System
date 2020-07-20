@@ -18,7 +18,7 @@ mongoose
     useNewUrlParser: true,
     useCreateIndex: true,
     useFindAndModify: false
-  })
+  }) 
   .then(() => console.log("DB Connection successful... 🔥🔥🔥"));
 
 // start serve and listen on port
