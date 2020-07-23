@@ -1,12 +1,12 @@
 class APIFeatures {
   constructor(query, queryString) {
-    this.query = query;
-    this.queryString = queryString;
+    this.query = query; // query from mongoose
+    this.queryString = queryString; //the query from the routes i.e req.query
   }
 
   // 1a. Filtering
   filter() {
-    const queryObj = { ...req.query }; // makes new copy of request query
+    const queryObj = { ...this.queryString }; // makes new copy of request query
     const excludedFields = ["page", "sort", "limit", "fields"];
     //delete specified fields from queryObj if they include any of the above
     excludedFields.forEach((el) => delete queryObj[el]);
@@ -49,12 +49,10 @@ class APIFeatures {
     // 4. Pagination
     // if page=3,&limit=10, page 1, 1-10, page 2, 11 - 20, page 3, 21 - 30
     const page = this.queryString.page * 1 || 1; // returns the requested page or defaults to 1. multiplying a string by 1 converts it into a number
-    const limit = this.queryString.limit * 1 || 20;
+    const limit = this.queryString.limit * 1 || 5;
     const skip = (page - 1) * limit;
 
     this.query = this.query.skip(skip).limit(limit);
-
-  
 
     return this;
   }

@@ -35,15 +35,15 @@ exports.getAllGuards = catchAsync(async (req, res, next) => {
   //req.query is used to access queries(optional params) for filtering
 
   // execute query
-  // const features = new APIFeatures(Guard.find(), req.query)
-  //   .filter()
-  //   .sort()
-  //   .limitFields()
-  //   .paginate();
+  const features = new APIFeatures(Guard.find(), req.query)
+    .filter()
+    .sort()
+    .limitFields()
+    .paginate();
 
-  // const guards = await features.query;
+  const guards = await features.query;
 
-  const guards = await Guard.find();
+  // const guards = await Guard.find();
 
   // send request
   res.status(200).json({
