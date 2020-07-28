@@ -34,20 +34,16 @@ const guardsSchema = new mongoose.Schema(
     },
 
     zone: {
-      type: String,
-      // custom(defined yourself) validator
-      // validate: {
-      // validator function, must return boolean
-      //   validator: function(val) {
-
-      // the "this" keyword only works for creating new document
-      // but not on update
-      //   },
-      // validator message ({VALUE}), mongoose value
-      //   message: "some ({VALUE}) validation message"
-      // }
+      type: mongoose.Schema.ObjectId,
+      ref: "Zone",
     },
-    location: String,
+    locations: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: "Location",
+      },
+    ],
+
     title: String,
     slug: String,
     shift: {
