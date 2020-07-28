@@ -132,7 +132,7 @@ exports.deleteGuard = catchAsync(async (req, res, next) => {
 exports.getGuardStats = catchAsync(async (req, res, next) => {
   const stats = await Guard.aggregate([
     {
-      $match: { salary: { gte: 500 } }, // match is used to select documents
+      // $match: { salary: { $gte: 500 } }, // match is used to select documents
     },
     {
       $group: {
