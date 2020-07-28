@@ -11,17 +11,17 @@ const guardsSchema = new mongoose.Schema(
       trim: true,
       unique: true, // helps to avoid duplication of field name
       maxlength: [60, "A guard name must be less than 60 characters"],
-      minlength: [10, "A guard name must be more than 5 characters"]
+      minlength: [5, "A guard name must be more than 5 characters"],
       //for numbers and dates, we have min and max
       // validate: [validator.isAlpha, "name must contain only letters"] // install first
     },
     dateOfBirth: {
       type: Date,
-      required: [true, "Date of Birth is required"]
+      required: [true, "Date of Birth is required"],
     },
     address: {
       type: String,
-      required: [true, "Address is required"]
+      required: [true, "Address is required"],
     },
     gender: {
       type: String,
@@ -29,12 +29,12 @@ const guardsSchema = new mongoose.Schema(
       enum: {
         // options are restricted to the 3 values, available only on strings
         values: ["Male", "Female, Other"],
-        message: "Gender is either Male, Female or Other"
-      }
+        message: "Gender is either Male, Female or Other",
+      },
     },
 
     zone: {
-      type: String
+      type: String,
       // custom(defined yourself) validator
       // validate: {
       // validator function, must return boolean
@@ -55,12 +55,12 @@ const guardsSchema = new mongoose.Schema(
       required: [true, "Shift is required"],
       enum: {
         values: ["Day", "Night"],
-        message: "Shift is either Day or Night"
-      }
+        message: "Shift is either Day or Night",
+      },
     },
     passportPicture: {
       type: String,
-      required: [true, "Passport picture is required"]
+      required: [true, "Passport picture is required"],
     },
     // vipGuard: {
     //   type: Boolean,
@@ -69,13 +69,13 @@ const guardsSchema = new mongoose.Schema(
     createdAt: {
       type: Date,
       default: Date.now(),
-      select: false
-    }
+      select: false,
+    },
   },
   {
     // set virtuals to true on json and object
     toJSON: { virtuals: true },
-    toObject: { virtuals: true }
+    toObject: { virtuals: true },
   }
 );
 /**
@@ -85,7 +85,7 @@ const guardsSchema = new mongoose.Schema(
  */
 
 // virtuals => fields that are defined on the schema but it not persisted or save to the DB
-guardsSchema.virtual("age").get(function() {
+guardsSchema.virtual("age").get(function () {
   return Date.now() - this.dateOfBirth;
 });
 
@@ -101,7 +101,7 @@ guardsSchema.virtual("age").get(function() {
  * eg. of document middleware that runs before (pre) an event(save() & create())
  *  the "this" in a document middleware keyword points to the currently processed document
  * */
-guardsSchema.pre("save", function(next) {
+guardsSchema.pre("save", function (next) {
   this.slug = slugify(this.name, { lower: true });
   next();
 });
