@@ -8,8 +8,8 @@ const zoneSchema = new mongoose.Schema({
   },
   locations: [
     {
-      type: mongoose.Schema.ObjectID,
-      ref: "Locations",
+      type: mongoose.Schema.ObjectId,
+      ref: "Location",
     },
   ],
 });
