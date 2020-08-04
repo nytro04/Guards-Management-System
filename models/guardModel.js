@@ -44,8 +44,8 @@ const guardsSchema = new mongoose.Schema(
       },
     ],
 
-    // title: String,
-    // slug: String,
+    title: String,
+    slug: String,
     shift: {
       type: String,
       required: [true, "Shift is required"],
