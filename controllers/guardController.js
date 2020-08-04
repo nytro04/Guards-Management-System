@@ -75,6 +75,41 @@ exports.getGuard = catchAsync(async (req, res, next) => {
 
 // Create new Guard
 exports.createGuard = catchAsync(async (req, res, next) => {
+  const {
+    name,
+    dateOfBirth,
+    address,
+    gender,
+    zone,
+    location,
+    shift,
+    passportPicture,
+  } = req.body;
+
+  //steps for creating guard
+  //check required fields
+  if (!name) return next(new AppError("Please provide a name", 400));
+  if (!dateOfBirth)
+    return next(new AppError("Please provide a date Of Birth", 400));
+  if (!address) return next(new AppError("Please provide an address", 400));
+  if (!gender) return next(new AppError("Please provide a gender", 400));
+  if (!zone) return next(new AppError("Please provide a zone", 400));
+  if (!location) return next(new AppError("Please provide a location", 400));
+  if (!shift) return next(new AppError("Please provide a shift", 400));
+  if (!passportPicture)
+    return next(new AppError("Please provide a passportPicture", 400));
+
+  const guard = {
+    name,
+    dateOfBirth,
+    address,
+    gender,
+    zone,
+    location,
+    shift,
+    passportPicture,
+  };
+
   /**
    * newGuard creates a new guard document
    * with data from the request body.
@@ -86,7 +121,7 @@ exports.createGuard = catchAsync(async (req, res, next) => {
    * by adding .then or async to the function eg. async (req, res)
    * and awaiting for the response
    */
-  const newGuard = await Guard.create(req.body);
+  const newGuard = await Guard.create(guard);
 
   res.status(201).json({
     status: "success",
