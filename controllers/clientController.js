@@ -2,6 +2,16 @@ const Client = require("../models/clientModel");
 const catchAsync = require("./../utils/catchAsync");
 const AppError = require("./../utils/appError");
 
+/**
+ * Clients Routes Handler Functions or controllers
+ * handles routes to the various clients endpoints
+ *
+ * All communication with the DB returns a promise
+ * @param {object} req
+ * @param {object} res
+ * @param {function} next calls the next middleware in the middleware stack
+ */
+
 //Get all clients
 exports.getAllClients = catchAsync(async (req, res, next) => {
   const clients = Client.find();
@@ -37,6 +47,23 @@ exports.createClient = catchAsync(async (req, res, next) => {
     status: "success",
     data: {
       client: newClient,
+    },
+  });
+});
+
+//Get single client
+exports.getClient = catchAsync(async (req, res, next) => {
+  // Client.findOne({_id: req.params.id}) //same as findById below
+
+  //get client by ID
+  const client = await Client.findById(req.params.id);
+
+  if (!client) return next(new AppError("No client with ID was found", 404));
+
+  res.status(200).json({
+    status: "success",
+    data: {
+      client,
     },
   });
 });
