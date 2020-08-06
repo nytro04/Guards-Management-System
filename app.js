@@ -5,7 +5,7 @@ const helmet = require("helmet");
 const mongoSanitize = require("express-mongo-sanitize");
 const xss = require("xss-clean");
 const hpp = require("hpp");
-const compression = require("compression")
+const compression = require("compression");
 
 const AppError = require("./utils/appError");
 const globalErrorHandler = require("./controllers/errorController.js");
@@ -14,7 +14,6 @@ const globalErrorHandler = require("./controllers/errorController.js");
 const guardRouter = require("./routes/guardRoutes");
 const userRouter = require("./routes/userRoutes");
 const clientRouter = require("./routes/clientRoutes");
-const compression = require("compression");
 
 // initial express with app
 const app = express();
@@ -57,7 +56,7 @@ app.use(
   })
 );
 
-app.use(compression())
+app.use(compression());
 
 // allows us to serve static files in the public folder
 // app.use(express.static(`${__dirname / public}`));
