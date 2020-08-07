@@ -16,7 +16,7 @@ const app = require("./app");
 // const DB = process.env.DATABASE;
 const DB = process.env.DATABASE.replace(
   "<PASSWORD>",
-  process.env.DATABASE_PASSWORD 
+  process.env.DATABASE_PASSWORD
 );
 
 mongoose
@@ -25,7 +25,8 @@ mongoose
     useCreateIndex: true,
     useFindAndModify: false,
   })
-  .then(() => console.log("DB Connection successful... 🔥🔥🔥"));
+  .then(() => console.log("DB Connection successful... 🔥🔥🔥"))
+  .catch((errors) => console.log(errors));
 
 // start serve and listen on port
 const port = process.env.PORT || 8000;
