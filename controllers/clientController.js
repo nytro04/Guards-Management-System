@@ -88,7 +88,16 @@ exports.updateClient = catchAsync(async (req, res, next) => {
   });
 });
 
-
 /**
- * Delete Client 
+ * Delete Client
  */
+exports.deleteClient = catchAsync(async (req, res, next) => {
+  const client = await Client.findByIdAndDelete(req.params.id);
+
+  if (!client) return next(new AppError("No client found with that ID", 404));
+
+  res.status(204).json({
+    status: "success",
+    data: null,
+  });
+});
