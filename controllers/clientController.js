@@ -87,3 +87,8 @@ exports.updateClient = catchAsync(async (req, res, next) => {
     },
   });
 });
+
+
+/**
+ * Delete Client 
+ */
