@@ -67,3 +67,23 @@ exports.getClient = catchAsync(async (req, res, next) => {
     },
   });
 });
+
+/**
+ *  Update or Edit Client
+ */
+exports.updateClient = catchAsync(async (req, res, next) => {
+  const client = await Client.findByIdAndUpdate(req.params.id, req.body, {
+    new: true, // returns the new updated client instead of the old one
+    runValidators: true, // will run DB validators against the updated values
+  });
+
+  if (!client)
+    return next(new AppError("No client was found with that ID", 404));
+
+  res.status(200).json({
+    status: "success",
+    data: {
+      client,
+    },
+  });
+});
