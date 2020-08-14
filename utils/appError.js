@@ -8,7 +8,7 @@ class AppError extends Error {
   // it is called each time a new object is created from the AppError class
   constructor(message, statusCode) {
     // super is called when we extend a parent class(Error). this calls the parent constructor
-    super(message);
+    super(message); 
     this.statusCode = statusCode;
     this.status = `${statusCode}`.startsWith("4") ? "fail" : "error";
     this.isOperational = true;
