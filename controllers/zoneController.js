@@ -43,3 +43,17 @@ exports.createZone = catchAsync(async (req, res, next) => {
     },
   });
 });
+
+// get single zone
+exports.getZone = catchAsync(async (req, res, next) => {
+  const zone = await Zone.findById(req.params.id);
+
+  if (!zone) return new AppError("No zone found with that ID", 404);
+
+  res.status(200).json({
+    status: "success",
+    data: {
+      zone,
+    },
+  });
+});
