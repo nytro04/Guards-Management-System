@@ -26,6 +26,7 @@ exports.getAllClients = catchAsync(async (req, res, next) => {
 
 //Create new Client
 exports.createClient = catchAsync(async (req, res, next) => {
+  // get data from request body
   const { name, contactPerson, email, phone, rate, address } = req.body;
 
   // check for required fields
