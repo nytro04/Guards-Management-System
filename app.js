@@ -6,6 +6,7 @@ const mongoSanitize = require("express-mongo-sanitize");
 const xss = require("xss-clean");
 const hpp = require("hpp");
 const compression = require("compression");
+const cors = require("cors");
 
 const AppError = require("./utils/appError");
 const globalErrorHandler = require("./controllers/errorController.js");
@@ -57,6 +58,10 @@ app.use(
 );
 
 app.use(compression());
+
+//allows CORS
+app.use(cors());
+app.options("*", cors());
 
 // allows us to serve static files in the public folder
 // app.use(express.static(`${__dirname / public}`));

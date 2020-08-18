@@ -13,21 +13,11 @@ dotenv.config({ path: "./config.env" });
 
 const app = require("./app");
 
-<<<<<<< HEAD
-// const DB = process.env.DATABASE_LOCAL;
-
-// will use in production
-const DB = process.env.DATABASE.replace(
-  "<PASSWORD>",
-  process.env.DATABASE_PASSWORD
-);
-=======
 const DB = process.env.DATABASE_LOCAL;
 // const DB = process.env.DATABASE.replace(
 //   "<PASSWORD>",
 //   process.env.DATABASE_PASSWORD
 // );
->>>>>>> develop
 
 mongoose
   .connect(DB, {

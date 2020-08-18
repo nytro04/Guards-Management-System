@@ -57,3 +57,8 @@ exports.getZone = catchAsync(async (req, res, next) => {
     },
   });
 });
+
+// update or edit zone
+exports.updateZone = catchAsync(async(req, res, next) => {
+    
+})
