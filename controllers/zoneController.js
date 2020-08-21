@@ -59,20 +59,34 @@ exports.getZone = catchAsync(async (req, res, next) => {
 });
 
 // update or edit zone
-exports.updateZone = catchAsync(async(req, res, next) => {
-    const zone = await Zone.findByIdAndUpdate(req.params.id, req.body, {
-      new: true, // returns the new updated document instead of the old one
-      runValidators: true // run validators against the updated request body
-    })
+exports.updateZone = catchAsync(async (req, res, next) => {
+  const zone = await Zone.findByIdAndUpdate(req.params.id, req.body, {
+    new: true, // returns the new updated document instead of the old one
+    runValidators: true, // run validators against the updated request body
+  });
 
-    if(!zone) {
-      return next(new AppError("No zone was found with that ID", 404))
-    }
+  if (!zone) {
+    return next(new AppError("No zone was found with that ID", 404));
+  }
 
-    res.status(200).json({
-      status: "success",
-      data: {
-        zone
-      }
-    })
-})
+  res.status(200).json({
+    status: "success",
+    data: {
+      zone,
+    },
+  });
+});
+
+// delete zone
+exports.deleteZone = catchAsync(async (req, res, next) => {
+  const zone = await Zone.findByIdAndDelete(req.params.id);
+
+  if (!zone) {
+    return next(new AppError("No guard zone was found with that ID", 404));
+  }
+
+  res.status(204).json({
+    status: "success",
+    data: null,
+  });
+});
