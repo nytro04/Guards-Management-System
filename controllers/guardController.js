@@ -135,7 +135,7 @@ exports.createGuard = catchAsync(async (req, res, next) => {
 exports.updateGuard = catchAsync(async (req, res, next) => {
   const guard = await Guard.findByIdAndUpdate(req.params.id, req.body, {
     new: true, // returns the new updated document instead of the old one
-    runValidators: true, // runs validators against the model's schema
+    runValidators: true, // runs validators against = request body the model's schema
   });
 
   if (!guard) {
