@@ -8,7 +8,7 @@ const AppError = require("./../utils/appError");
 const handleDuplicateFieldsErrorDB = (err) => {
   const value = err.errmsg.match(/(["'])(\\?.)*?\1/)[0];
 
-  const message = `Duplicate field value: ${value}. Please use another value`;
+  const message = `Input value: ${value} already exist. Please enter another value`;
   return new AppError(message, 400);
 };
 
@@ -18,7 +18,7 @@ const handleDuplicateFieldsErrorDB = (err) => {
  * @returns {Object} new AppError
  */
 const handleCastErrorDB = (err) => {
-  const message = `Invalid ${err.name}: ${err.value}`;
+  const message = `Invalid ${err.path}: ${err.value}`;
   return new AppError(message, 400);
 };
 
