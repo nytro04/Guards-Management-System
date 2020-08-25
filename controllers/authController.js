@@ -40,7 +40,7 @@ const createAndSendToken = (user, statusCode, res) => {
   res.cookie("guards-jwt", token, cookieOptions);
 
   // Remove password from output
-  user.password = undefined
+  user.password = undefined;
 
   res.status(statusCode).json({
     status: "success",
@@ -107,6 +107,16 @@ exports.login = catchAsync(async (req, res, next) => {
   //   token,
   // });
 });
+
+//log out user using {} cookie
+exports.logout = (req, res) => {
+  res.cookie("guards-jwt", "logged out", {
+    expires: new Date(Date.now() + 10 * 1000),
+    httpOnly: true,
+  });
+
+  res.status(200).json({ status: "success" });
+};
 
 exports.protect = catchAsync(async (req, res, next) => {
   let token;
@@ -203,7 +213,7 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
   try {
     await sendMail({
       email: user.email,
-      subject: "[GuardSys] Please reset your password",
+      subject: "[GuardSys] Reset your password",
       message,
     });
 

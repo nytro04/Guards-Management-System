@@ -18,6 +18,7 @@ const {
   resetPassword,
   protect,
   updatePassword,
+  logout,
 } = require("./../controllers/authController");
 
 /**
@@ -41,6 +42,9 @@ router.post("/signup", signup);
 // Sign in user route
 // checkout and implement maximum number of log in attempts.
 router.post("/login", login);
+
+//log out signed in user
+router.get("/logout", logout);
 
 // forgot password
 router.post("/forgotPassword", forgotPassword);
