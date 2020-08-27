@@ -17,6 +17,7 @@ const {
   forgotPassword,
   resetPassword,
   protect,
+  restrictTo,
   updatePassword,
   logout,
 } = require("./../controllers/authController");
@@ -36,7 +37,8 @@ const router = express.Router();
  */
 
 // Sign up or Register a new user route
-// add confirm email address after sign up
+//todo: add confirm email address after sign up
+// router.post("/signup", protect, restrictTo("admin", "super-amin"), signup);
 router.post("/signup", signup);
 
 // Sign in user route

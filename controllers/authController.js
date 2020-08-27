@@ -54,6 +54,28 @@ const createAndSendToken = (user, statusCode, res) => {
 // Sign Up new user
 exports.signup = catchAsync(async (req, res, next) => {
   const { role, name, email, password, passwordConfirm } = req.body;
+
+  //check required fields
+  if (!role) return next(new AppError("Please provide a user role", 400));
+  if (!name) return next(new AppError("Please provide a user name", 400));
+  if (!email) return next(new AppError("Please provide a user email", 400));
+  if (!password)
+    return next(new AppError("Please provide a user password", 400));
+  if (!password)
+    return next(new AppError("Please provide a user password confirm", 400));
+
+  /**
+   * newUser creates a new user document
+   * with data from the request body.
+   * any field passed to the request body
+   * but is not in the DB schema is ignored by the DB.
+   * @param {object} req.body
+   *
+   * save or create returns a promise, this is handled
+   * by adding .then or async to the function eg. async (req, res)
+   * and awaiting for the response
+   */
+
   const newUser = await User.create({
     role,
     name,
