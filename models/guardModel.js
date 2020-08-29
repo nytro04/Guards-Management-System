@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const slugify = require("slugify");
+// const Zone = require("./zoneModel");
 // const validator = require("validator") install first
 
 // create resource schema
@@ -33,10 +34,16 @@ const guardsSchema = new mongoose.Schema(
       },
     },
 
-    zone: {
+    // child referencing zones in guard model
+    zones: {
       type: mongoose.Schema.ObjectId,
       ref: "Zone",
     },
+
+    // embedded zone here check document middleware below
+    // zones: Array,
+
+    //referencing location model here
     locations: [
       {
         type: mongoose.Schema.ObjectId,
@@ -101,6 +108,21 @@ guardsSchema.pre("save", function (next) {
   this.slug = slugify(this.name, { lower: true });
   next();
 });
+
+/** This was removed in place child referencing because
+ * of the draw backs 0f embedding in this case esp. updating
+ *  Embedding Zones in Guards Model
+ * This will get the zones documents from the zones id provided
+ */
+// guardsSchema.pre("save", async function (next) {
+//   const zonesPromises = this.zones.map(
+//     async (zoneId) => await Zone.findById(zoneId)
+//   );
+
+//   this.zones = await Promise.all(zonesPromises);
+
+//   next();
+// });
 
 /**
  * post middleware has access to the just save document (doc)
