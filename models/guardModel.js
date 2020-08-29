@@ -109,6 +109,17 @@ guardsSchema.pre("save", function (next) {
   next();
 });
 
+// adding populate here will replace zones id with actual data (referencing ** child)
+// -select will also remove items from the response
+guardsSchema.pre("/^find", function (next) {
+  this.populate({
+    path: "zones",
+    select: "-__v",
+  });
+
+  next();
+});
+
 /** This was removed in place child referencing because
  * of the draw backs 0f embedding in this case esp. updating
  *  Embedding Zones in Guards Model

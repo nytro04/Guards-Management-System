@@ -59,7 +59,7 @@ exports.getAllGuards = catchAsync(async (req, res, next) => {
 exports.getGuard = catchAsync(async (req, res, next) => {
   // Guard.findOne({ _id: req.params.id}) same as findById
 
-  const guard = await Guard.findById(req.params.id);
+  const guard = await Guard.findById(req.params.id); 
 
   if (!guard) {
     return next(new AppError("No guard was found with that ID", 404));
