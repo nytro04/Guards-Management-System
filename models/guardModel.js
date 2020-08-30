@@ -7,6 +7,9 @@ const slugify = require("slugify");
 // Type of Ids, banks account and branch,reprimands,guarantors and details, employment history,
 // reviews, scanned application,
 
+// Opt for parent referencing if you dont know
+// how much your arrays will grow
+
 // create resource schema
 const guardsSchema = new mongoose.Schema(
   {
@@ -38,8 +41,12 @@ const guardsSchema = new mongoose.Schema(
       },
     },
 
-    // child referencing zones in guard model
-    zones: {
+    // child referencing supervisors in guard model
+    supervisors: {
+      type: mongoose.Schema.ObjectId,
+      ref: "User",
+    },
+    zone: {
       type: mongoose.Schema.ObjectId,
       ref: "Zone",
     },
@@ -47,7 +54,7 @@ const guardsSchema = new mongoose.Schema(
     // embedded zone here check document middleware below
     // zones: Array,
 
-    //referencing location model here
+    // referencing location model here
     locations: [
       {
         type: mongoose.Schema.ObjectId,
@@ -92,6 +99,7 @@ const guardsSchema = new mongoose.Schema(
  */
 
 // virtuals => fields that are defined on the schema but it not persisted or save to the DB
+// virtual properties will show in the output
 guardsSchema.virtual("age").get(function () {
   return Date.now() - this.dateOfBirth;
 });
@@ -117,8 +125,9 @@ guardsSchema.pre("save", function (next) {
 // -select will also remove items from the response
 guardsSchema.pre("/^find", function (next) {
   this.populate({
-    path: "zones",
     path: "locations",
+    path: "zone",
+    path: "supervisors",
     select: "-__v",
   });
 
