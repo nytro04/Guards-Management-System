@@ -3,6 +3,10 @@ const slugify = require("slugify");
 // const Zone = require("./zoneModel");
 // const validator = require("validator") install first
 
+//todo =>
+// Type of Ids, banks account and branch,reprimands,guarantors and details, employment history,
+// reviews, scanned application,
+
 // create resource schema
 const guardsSchema = new mongoose.Schema(
   {
@@ -114,6 +118,7 @@ guardsSchema.pre("save", function (next) {
 guardsSchema.pre("/^find", function (next) {
   this.populate({
     path: "zones",
+    path: "locations",
     select: "-__v",
   });
 
@@ -121,8 +126,8 @@ guardsSchema.pre("/^find", function (next) {
 });
 
 /** This was removed in place child referencing because
- * of the draw backs 0f embedding in this case esp. updating
  *  Embedding Zones in Guards Model
+ * of the draw backs 0f embedding in this case esp. updating
  * This will get the zones documents from the zones id provided
  */
 // guardsSchema.pre("save", async function (next) {
@@ -173,10 +178,6 @@ guardsSchema.pre("/^find", function (next) {
 // this.pipeline().unshift({ $match: { vipGuard: { $ne: true } } });
 //    next()
 //  })
-
-//todo =>
-// Type of Ids, banks account and branch,reprimands,guarantors and details, employment history,
-// reviews, scanned application,
 
 // create resource(Guard) model from schema
 const Guards = mongoose.model("Guards", guardsSchema);

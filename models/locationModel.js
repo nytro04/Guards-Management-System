@@ -17,3 +17,7 @@ const locationSchema = mongoose.Schema({
     required: [required, "Zone is required"],
   },
 });
+
+const Location = mongoose.model("Location", locationSchema);
+
+module.exports = Location;

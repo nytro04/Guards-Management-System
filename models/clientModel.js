@@ -34,12 +34,13 @@ const clientSchema = mongoose.Schema({
     required: [true, "Client address is required"],
     trim: true,
   },
-  //   locations: [
-  //     {
-  //       type: mongoose.Schema.ObjectId,
-  //       ref: "Location",
-  //     },
-  //   ],
+  // child referencing zones in guard model
+  locations: [
+    {
+      type: mongoose.Schema.ObjectId,
+      ref: "Location",
+    },
+  ],
 });
 
 const Client = mongoose.model("Client", clientSchema);
