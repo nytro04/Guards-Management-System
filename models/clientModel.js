@@ -46,6 +46,13 @@ const clientSchema = mongoose.Schema({
   // ],
 });
 
+// Virtual Populate
+clientSchema.virtual("locations", {
+  ref: "Location",
+  foreignField: "client", // how client model is called in the Location model
+  localField: "_id", // how client is referred to in client model
+});
+
 const Client = mongoose.model("Client", clientSchema);
 
 module.exports = Client;

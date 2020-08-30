@@ -30,18 +30,27 @@ const locationSchema = mongoose.Schema(
   }
 );
 
+// comment this out if it's over populating 
 locationSchema.pre(/^find/, function (next) {
   this.populate({
     path: "client",
-    select: "name", //will only provide client name 
+    select: "name", //will only provide client name
   }).populate({
     path: "zone",
     select: "name",
   });
 
-  next()
+  next();
 });
 
 const Location = mongoose.model("Location", locationSchema);
 
 module.exports = Location;
+
+// virtual populate
+// populate a child(location) in parent(client)
+// get access all the locations on a client
+// populating all the locations on the client without persisting it
+
+
+

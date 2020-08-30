@@ -57,7 +57,7 @@ exports.getClient = catchAsync(async (req, res, next) => {
   // Client.findOne({_id: req.params.id}) //same as findById below
 
   //get client by ID
-  const client = await Client.findById(req.params.id);
+  const client = await Client.findById(req.params.id).populate("locations");
 
   if (!client) return next(new AppError("No client with ID was found", 404));
 
