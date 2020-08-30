@@ -30,6 +30,18 @@ const locationSchema = mongoose.Schema(
   }
 );
 
+locationSchema.pre(/^find/, function (next) {
+  this.populate({
+    path: "client",
+    select: "name", //will only provide client name 
+  }).populate({
+    path: "zone",
+    select: "name",
+  });
+
+  next()
+});
+
 const Location = mongoose.model("Location", locationSchema);
 
 module.exports = Location;

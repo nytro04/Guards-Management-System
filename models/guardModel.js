@@ -42,10 +42,10 @@ const guardsSchema = new mongoose.Schema(
     },
 
     // child referencing supervisors in guard model
-    supervisors: {
-      type: mongoose.Schema.ObjectId,
-      ref: "User",
-    },
+    // supervisors: {
+    //   type: mongoose.Schema.ObjectId,
+    //   ref: "User",
+    // },
     zone: {
       type: mongoose.Schema.ObjectId,
       ref: "Zone",
@@ -123,12 +123,12 @@ guardsSchema.pre("save", function (next) {
 
 // adding populate here will replace zones id with actual data (referencing ** child)
 // -select will also remove items from the response
-guardsSchema.pre("/^find", function (next) {
+guardsSchema.pre(/^find/, function (next) {
   this.populate({
     path: "locations",
-    path: "zone",
-    path: "supervisors",
     select: "-__v",
+  }).populate({
+    path: "zone",
   });
 
   next();

@@ -13,7 +13,7 @@ const AppError = require("./../utils/appError");
  */
 
 // Get all locations
-exports.getGetAllLocations = catchAsync(async (req, res, next) => {
+exports.getAllLocations = catchAsync(async (req, res, next) => {
   const locations = await Location.find();
 
   res.status(200).json({
@@ -40,7 +40,7 @@ exports.createLocation = catchAsync(async (req, res, next) => {
   res.status(201).json({
     status: "success",
     data: {
-      location: newLocation, 
+      location: newLocation,
     },
   });
 });

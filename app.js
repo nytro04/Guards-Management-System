@@ -15,6 +15,7 @@ const globalErrorHandler = require("./controllers/errorController.js");
 const guardRouter = require("./routes/guardRoutes");
 const userRouter = require("./routes/userRoutes");
 const clientRouter = require("./routes/clientRoutes");
+const locationRouter = require("./routes/locationRoutes");
 
 // initial express with app
 const app = express();
@@ -85,6 +86,7 @@ app.use((req, res, next) => {
 app.use("/api/v1/guards", guardRouter);
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/clients", clientRouter);
+app.use("/api/v1/zones", locationRouter);
 
 //catch all unhandled routes all(get,post,update,delete) * == all
 app.all("*", (req, res, next) => {
