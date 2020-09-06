@@ -59,7 +59,7 @@ exports.getAllGuards = catchAsync(async (req, res, next) => {
 exports.getGuard = catchAsync(async (req, res, next) => {
   // Guard.findOne({ _id: req.params.id}) same as findById
 
-  const guard = await Guard.findById(req.params.id); 
+  const guard = await Guard.findById(req.params.id);
 
   if (!guard) {
     return next(new AppError("No guard was found with that ID", 404));
@@ -133,19 +133,54 @@ exports.createGuard = catchAsync(async (req, res, next) => {
 
 // Update a Guard
 exports.updateGuard = catchAsync(async (req, res, next) => {
-  const guard = await Guard.findByIdAndUpdate(req.params.id, req.body, {
+  const {
+    name,
+    dateOfBirth,
+    address,
+    gender,
+    zone,
+    location,
+    shift,
+    passportPicture,
+  } = req.body;
+
+  //steps for creating guard
+  //check required fields
+  if (!name) return next(new AppError("Please provide a name", 400));
+  if (!dateOfBirth)
+    return next(new AppError("Please provide a date Of Birth", 400));
+  if (!address) return next(new AppError("Please provide an address", 400));
+  if (!gender) return next(new AppError("Please provide a gender", 400));
+  if (!zone) return next(new AppError("Please provide a zone", 400));
+  if (!location) return next(new AppError("Please provide a location", 400));
+  if (!shift) return next(new AppError("Please provide a shift", 400));
+  if (!passportPicture)
+    return next(new AppError("Please provide a passportPicture", 400));
+
+  const guard = {
+    name,
+    dateOfBirth,
+    address,
+    gender,
+    zone,
+    location,
+    shift,
+    passportPicture,
+  };
+
+  const UpdatedGuard = await Guard.findByIdAndUpdate(req.params.id, guard, {
     new: true, // returns the new updated document instead of the old one
     runValidators: true, // runs validators against = request body the model's schema
   });
 
-  if (!guard) {
+  if (!UpdatedGuard) {
     return next(new AppError("No guard was found with that ID", 404));
   }
 
   res.status(200).json({
     status: "success",
     data: {
-      guard,
+      UpdatedGuard,
     },
   });
 });

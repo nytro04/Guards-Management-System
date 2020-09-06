@@ -44,3 +44,9 @@ exports.createLocation = catchAsync(async (req, res, next) => {
     },
   });
 });
+
+
+exports.updateLocation = catchAsync(async (req, res, next) => {
+
+  const location = await Location.findByIdAndUpdate(req.params.id, req.body)
+})

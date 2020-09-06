@@ -18,6 +18,6 @@ router
   .route("/:id")
   .get(getClient)
   .patch(updateClient)
-  .delete(protect, restrictTo("admin-bd"), deleteClient);
+  .delete(protect, restrictTo("admin-bd,super-admin"), deleteClient);
 
 module.exports = router;
