@@ -73,18 +73,32 @@ exports.getClient = catchAsync(async (req, res, next) => {
  *  Update or Edit Client
  */
 exports.updateClient = catchAsync(async (req, res, next) => {
-  const client = await Client.findByIdAndUpdate(req.params.id, req.body, {
+  // get data from request body
+  const { name, contactPerson, email, phone, rate, address } = req.body;
+
+  // check for required fields
+  if (!name) return next(new AppError("Please provide a name"));
+  if (!contactPerson)
+    return next(new AppError("Please provide a contactPerson"));
+  if (!email) return next(new AppError("Please provide a email"));
+  if (!phone) return next(new AppError("Please provide a phone"));
+  if (!rate) return next(new AppError("Please provide a rate"));
+  if (!address) return next(new AppError("Please provide a address"));
+
+  const client = { name, contactPerson, email, phone, rate, address };
+
+  const updatedClient = await Client.findByIdAndUpdate(req.params.id, client, {
     new: true, // returns the new updated client instead of the old one
     runValidators: true, // will run DB validators against the updated values
   });
 
-  if (!client)
+  if (!updatedClient)
     return next(new AppError("No client was found with that ID", 404));
 
   res.status(200).json({
     status: "success",
     data: {
-      client,
+      updatedClient,
     },
   });
 });
