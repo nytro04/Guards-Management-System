@@ -60,7 +60,15 @@ exports.getZone = catchAsync(async (req, res, next) => {
 
 // update or edit zone
 exports.updateZone = catchAsync(async (req, res, next) => {
-  const zone = await Zone.findByIdAndUpdate(req.params.id, req.body, {
+  // get data from request body
+  const { name, areas } = req.body;
+
+  //check for the required fields
+  if (!name) return next(new AppError("Please provide a name", 400));
+
+  const zone = { name, areas };
+
+  const updatedZone = await Zone.findByIdAndUpdate(req.params.id, zone, {
     new: true, // returns the new updated document instead of the old one
     runValidators: true, // run validators against the updated request body
   });
@@ -72,7 +80,7 @@ exports.updateZone = catchAsync(async (req, res, next) => {
   res.status(200).json({
     status: "success",
     data: {
-      zone,
+      zone: updatedZone,
     },
   });
 });
