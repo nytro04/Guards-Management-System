@@ -1,6 +1,6 @@
-const Location = require("../models/locationModel");
-const catchAsync = require("./../utils/catchAsync");
-const AppError = require("./../utils/appError");
+const Location = require("../models/locationModel")
+const catchAsync = require("./../utils/catchAsync")
+const AppError = require("./../utils/appError")
 
 /**
  * Location Routes Handler Functions or controllers
@@ -14,60 +14,60 @@ const AppError = require("./../utils/appError");
 
 // Get all locations
 exports.getAllLocations = catchAsync(async (req, res, next) => {
-  const locations = await Location.find();
+  const locations = await Location.find()
 
   res.status(200).json({
     status: "success",
     data: {
       locations,
     },
-  });
-});
+  })
+})
 
 exports.createLocation = catchAsync(async (req, res, next) => {
-  const { name, client, zone, area } = req.body;
+  const { name, client, zone, area } = req.body
 
   //Check for required fields
-  if (!name) return next(new AppError("Please provide a location name"));
-  if (!area) return next(new AppError("Please provide a location area"));
-  if (!client) return next(new AppError("Please provide a client name"));
-  if (!zone) return next(new AppError("Please provide a zone name"));
+  if (!name) return next(new AppError("Please provide a location name"))
+  if (!area) return next(new AppError("Please provide a location area"))
+  if (!client) return next(new AppError("Please provide a client name"))
+  if (!zone) return next(new AppError("Please provide a zone name"))
 
-  const location = { name, area, client, zone };
+  const location = { name, area, client, zone }
 
-  const newLocation = await Location.create(location);
+  const newLocation = await Location.create(location)
 
   res.status(201).json({
     status: "success",
     data: {
       location: newLocation,
     },
-  });
-});
+  })
+})
 
 exports.getLocation = catchAsync(async (req, res, next) => {
-  const location = await Location.findById(req.params.id);
+  const location = await Location.findById(req.params.id)
 
-  if (!location) return new AppError("No location was found with that ID", 404);
+  if (!location) return new AppError("No location was found with that ID", 404)
 
   res.status(200).json({
     status: "success",
     data: {
       location,
     },
-  });
-});
+  })
+})
 
 exports.updateLocation = catchAsync(async (req, res, next) => {
-  const { name, client, zone, area } = req.body;
+  const { name, client, zone, area } = req.body
 
   //Check for required fields
-  if (!name) return next(new AppError("Please provide a location name"));
-  if (!area) return next(new AppError("Please provide a location area"));
-  if (!client) return next(new AppError("Please provide a client name"));
-  if (!zone) return next(new AppError("Please provide a zone name"));
+  if (!name) return next(new AppError("Please provide a location name"))
+  if (!area) return next(new AppError("Please provide a location area"))
+  if (!client) return next(new AppError("Please provide a client name"))
+  if (!zone) return next(new AppError("Please provide a zone name"))
 
-  const location = { name, area, client, zone };
+  const location = { name, area, client, zone }
 
   const updatedLocation = await Location.findByIdAndUpdate(
     req.params.id,
@@ -76,15 +76,28 @@ exports.updateLocation = catchAsync(async (req, res, next) => {
       new: true, // return updated location
       runValidators: true, // run DB validations
     }
-  );
+  )
 
   if (!updatedLocation)
-    return new AppError("No location was found with that ID", 404);
+    return new AppError("No location was found with that ID", 404)
 
   res.status(201).json({
     status: "success",
     data: {
       location: updatedLocation,
     },
-  });
-});
+  })
+})
+
+exports.deleteLocation = catchAsync(async (req, res, next) => {
+  const locaton = await Location.findByIdAndDelete(req.params.id)
+
+  if (!locaton) {
+    return next(new AppError("No location witd Id was found", 404))
+  }
+
+  res.status(204).json({
+    status: "success",
+    data: null,
+  })
+})
