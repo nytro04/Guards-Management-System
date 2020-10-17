@@ -1,7 +1,7 @@
-const Guard = require("../models/guardModel");
-const APIFeatures = require("./../utils/apiFeatures");
-const catchAsync = require("./../utils/catchAsync");
-const AppError = require("./../utils/appError");
+const Guard = require('../models/guardModel')
+const APIFeatures = require('./../utils/apiFeatures')
+const catchAsync = require('./../utils/catchAsync')
+const AppError = require('./../utils/appError')
 
 /**
  * Guards Routes Handler Functions or Controllers
@@ -17,11 +17,11 @@ const AppError = require("./../utils/appError");
  */
 
 exports.aliasTop = (req, res, next) => {
-  req.query.limit = "10"; //limit the no. of data received to 10
-  req.query.sort = "-salary,age"; // guards with highest salary first and age when there is a tie
-  req.query.fields = "name,salary,age"; //fields wanted in the response data
-  next();
-};
+  req.query.limit = '10' //limit the no. of data received to 10
+  req.query.sort = '-salary,age' // guards with highest salary first and age when there is a tie
+  req.query.fields = 'name,salary,age' //fields wanted in the response data
+  next()
+}
 
 // Get all Guards //todo: implement filtering
 exports.getAllGuards = catchAsync(async (req, res, next) => {
@@ -39,39 +39,39 @@ exports.getAllGuards = catchAsync(async (req, res, next) => {
     .filter()
     .sort()
     .limitFields()
-    .paginate();
+    .paginate()
 
-  const guards = await features.query;
+  const guards = await features.query
 
   // const guards = await Guard.find();
 
   // send request
   res.status(200).json({
-    status: "success",
+    status: 'success',
     length: guards.length,
     data: {
       guards,
     },
-  });
-});
+  })
+})
 
 // Get Single Guard
 exports.getGuard = catchAsync(async (req, res, next) => {
   // Guard.findOne({ _id: req.params.id}) same as findById
 
-  const guard = await Guard.findById(req.params.id);
+  const guard = await Guard.findById(req.params.id)
 
   if (!guard) {
-    return next(new AppError("No guard was found with that ID", 404));
+    return next(new AppError('No guard was found with that ID', 404))
   }
 
   res.status(200).json({
-    status: "success",
+    status: 'success',
     data: {
       guard,
     },
-  });
-});
+  })
+})
 
 // Create new Guard
 exports.createGuard = catchAsync(async (req, res, next) => {
@@ -84,20 +84,20 @@ exports.createGuard = catchAsync(async (req, res, next) => {
     location,
     shift,
     passportPicture,
-  } = req.body;
+  } = req.body
 
   //steps for creating guard
   //check required fields
-  if (!name) return next(new AppError("Please provide a name", 400));
+  if (!name) return next(new AppError('Please provide a name', 400))
   if (!dateOfBirth)
-    return next(new AppError("Please provide a date Of Birth", 400));
-  if (!address) return next(new AppError("Please provide an address", 400));
-  if (!gender) return next(new AppError("Please provide a gender", 400));
-  if (!zone) return next(new AppError("Please provide a zone", 400));
-  if (!location) return next(new AppError("Please provide a location", 400));
-  if (!shift) return next(new AppError("Please provide a shift", 400));
+    return next(new AppError('Please provide a date Of Birth', 400))
+  if (!address) return next(new AppError('Please provide an address', 400))
+  if (!gender) return next(new AppError('Please provide a gender', 400))
+  if (!zone) return next(new AppError('Please provide a zone', 400))
+  if (!location) return next(new AppError('Please provide a location', 400))
+  if (!shift) return next(new AppError('Please provide a shift', 400))
   if (!passportPicture)
-    return next(new AppError("Please provide a passportPicture", 400));
+    return next(new AppError('Please provide a passportPicture', 400))
 
   const guard = {
     name,
@@ -108,7 +108,7 @@ exports.createGuard = catchAsync(async (req, res, next) => {
     location,
     shift,
     passportPicture,
-  };
+  }
 
   /**
    * newGuard creates a new guard document
@@ -121,15 +121,15 @@ exports.createGuard = catchAsync(async (req, res, next) => {
    * by adding .then or async to the function eg. async (req, res)
    * and awaiting for the response
    */
-  const newGuard = await Guard.create(guard);
+  const newGuard = await Guard.create(guard)
 
   res.status(201).json({
-    status: "success",
+    status: 'success',
     data: {
       guard: newGuard,
     },
-  });
-});
+  })
+})
 
 // Update a Guard
 exports.updateGuard = catchAsync(async (req, res, next) => {
@@ -142,20 +142,20 @@ exports.updateGuard = catchAsync(async (req, res, next) => {
     location,
     shift,
     passportPicture,
-  } = req.body;
+  } = req.body
 
   //steps for creating guard
   //check required fields
-  if (!name) return next(new AppError("Please provide a name", 400));
+  if (!name) return next(new AppError('Please provide a name', 400))
   if (!dateOfBirth)
-    return next(new AppError("Please provide a date Of Birth", 400));
-  if (!address) return next(new AppError("Please provide an address", 400));
-  if (!gender) return next(new AppError("Please provide a gender", 400));
-  if (!zone) return next(new AppError("Please provide a zone", 400));
-  if (!location) return next(new AppError("Please provide a location", 400));
-  if (!shift) return next(new AppError("Please provide a shift", 400));
+    return next(new AppError('Please provide a date Of Birth', 400))
+  if (!address) return next(new AppError('Please provide an address', 400))
+  if (!gender) return next(new AppError('Please provide a gender', 400))
+  if (!zone) return next(new AppError('Please provide a zone', 400))
+  if (!location) return next(new AppError('Please provide a location', 400))
+  if (!shift) return next(new AppError('Please provide a shift', 400))
   if (!passportPicture)
-    return next(new AppError("Please provide a passportPicture", 400));
+    return next(new AppError('Please provide a passportPicture', 400))
 
   const guard = {
     name,
@@ -166,37 +166,38 @@ exports.updateGuard = catchAsync(async (req, res, next) => {
     location,
     shift,
     passportPicture,
-  };
+  }
 
   const UpdatedGuard = await Guard.findByIdAndUpdate(req.params.id, guard, {
     new: true, // returns the new updated document instead of the old one
     runValidators: true, // runs validators against = request body the model's schema
-  });
+  })
 
   if (!UpdatedGuard) {
-    return next(new AppError("No guard was found with that ID", 404));
+    return next(new AppError('No guard was found with that ID', 404))
   }
 
   res.status(200).json({
-    status: "success",
+    status: 'success',
     data: {
       UpdatedGuard,
     },
-  });
-});
+  })
+})
 
+/* Delete Guard */
 exports.deleteGuard = catchAsync(async (req, res, next) => {
-  const guard = await Guard.findByIdAndDelete(req.params.id);
+  const guard = await Guard.findByIdAndDelete(req.params.id)
 
   if (!guard) {
-    return next(new AppError("No guard found with that ID", 404));
+    return next(new AppError('No guard found with that ID', 404))
   }
 
   res.status(204).json({
-    status: "success",
+    status: 'success',
     data: null,
-  });
-});
+  })
+})
 
 //Mongo pipeline aggregation = some computation, allows for the manipulation of data is some ways
 exports.getGuardStats = catchAsync(async (req, res, next) => {
@@ -209,11 +210,11 @@ exports.getGuardStats = catchAsync(async (req, res, next) => {
         // _id: "$salary", // get you all the stats list below about salary
         _id: null,
         numGuards: { $sum: 1 }, //total number of guards
-        totalSalary: { $sum: "$salary" }, // sum of guards salary
-        avgAge: { $avg: "$age" }, // average age
-        avgSalary: { $avg: "$salary" }, // average salary
-        minSalary: { $min: "$salary" }, // minimum salary
-        maxSalary: { $max: "$salary" }, // maximum salary
+        totalSalary: { $sum: '$salary' }, // sum of guards salary
+        avgAge: { $avg: '$age' }, // average age
+        avgSalary: { $avg: '$salary' }, // average salary
+        minSalary: { $min: '$salary' }, // minimum salary
+        maxSalary: { $max: '$salary' }, // maximum salary
       },
     },
     {
@@ -221,24 +222,24 @@ exports.getGuardStats = catchAsync(async (req, res, next) => {
     },
     // just to show we can repeat stages in the aggregation pipeline
     {
-      $match: { _id: { $ne: "male" } }, // match all document that's not equal to male
+      $match: { _id: { $ne: 'male' } }, // match all document that's not equal to male
     },
-  ]);
+  ])
 
   res.status(200).json({
-    status: "success",
+    status: 'success',
     data: {
       stats,
     },
-  });
-});
+  })
+})
 
 exports.getMonthlyPlan = catchAsync(async (req, res, next) => {
-  const year = req.params.year * 1;
+  const year = req.params.year * 1
 
   const plan = await Guard.aggregate([
     {
-      $unwind: "$age", // unwind spreads an array
+      $unwind: '$age', // unwind spreads an array
     },
     {
       $match: {
@@ -250,14 +251,14 @@ exports.getMonthlyPlan = catchAsync(async (req, res, next) => {
     },
     {
       $group: {
-        _id: { $month: "$age" },
+        _id: { $month: '$age' },
         numOfAge: { $sum: 1 },
-        guards: { $push: "$name" },
+        guards: { $push: '$name' },
       },
     },
     {
       // adds a new field to the result
-      $addFields: { month: "$_id" },
+      $addFields: { month: '$_id' },
     },
     {
       // adds or remove a field, 0 or 1
@@ -272,15 +273,15 @@ exports.getMonthlyPlan = catchAsync(async (req, res, next) => {
     {
       $limit: 6, // limits the output to 6
     },
-  ]);
+  ])
 
   res.status(200).json({
-    status: "success",
+    status: 'success',
     data: {
       stats,
     },
-  });
-});
+  })
+})
 
 /**
  * This was my try catch block of a controller before
