@@ -28,11 +28,10 @@ const app = express()
 
 
 //allows CORS
-// app.use(cors())
-// app.options('*', cors())
-app.use(cors({
-    methods: ['GET','POST','DELETE','UPDATE','PUT','PATCH']
-}));
+app.use(cors())
+app.options('*', cors())
+
+
 
 // Set security HTTP headers
 app.use(helmet())
