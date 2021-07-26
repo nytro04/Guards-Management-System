@@ -30,9 +30,8 @@ const app = express()
 //allows CORS
 // app.use(cors())
 // app.options('*', cors())
-
 app.use(cors({
-    origin: '*'
+    methods: ['GET','POST','DELETE','UPDATE','PUT','PATCH']
 }));
 
 // Set security HTTP headers
