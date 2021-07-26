@@ -26,6 +26,11 @@ const app = express()
  * # app.use # allows you to add middleware to your middleware stack
  */
 
+
+//allows CORS
+app.use(cors())
+app.options('*', cors())
+
 // Set security HTTP headers
 app.use(helmet())
 
@@ -61,9 +66,6 @@ app.use(
 
 app.use(compression())
 
-//allows CORS
-app.use(cors())
-app.options('*', cors())
 
 // allows us to serve static files in the public folder
 // app.use(express.static(`${__dirname / public}`));
@@ -89,7 +91,7 @@ app.use('/api/v1/users', userRouter)
 app.use('/api/v1/clients', clientRouter)
 app.use('/api/v1/zones', locationRouter)
 
-//catch all unhandled routes all(get,post,update,delete) * == all 
+//catch all unhandled routes all(get,post,update,delete) * == all
 app.all('*', (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server`, 404))
 })
